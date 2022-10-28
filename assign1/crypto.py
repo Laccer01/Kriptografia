@@ -92,7 +92,6 @@ def decrypt_vigenere(ciphertext, keyword):
         decrypted_plaintext += x
     return decrypted_plaintext
 
-# Merkle-Hellman Knapsack Cryptosystem
 
 def encrypt_scytale(plaintext, circumference):
     assert len(plaintext) % circumference == 0
@@ -122,45 +121,78 @@ def decrypt_scytale(ciphertext, circumference):
     return encrypted_plaintext
 
 
-def encrypt_mh(message, public_key):
-    """Encrypt an outgoing message using a public key.
+def encrypt_railfence(plaintext, num_rails):
+    rail = [['-1' for i in range(len(plaintext))] for j in range(num_rails)]
+     
+    dirDownFlag = False
+    row = 0
+    col = 0
+     
+    for i in range(len(plaintext)):
+        if (row == 0) or (row == num_rails - 1):
+            dirDownFlag = not dirDownFlag
+         
+        rail[row][col] = plaintext[i]
+        col += 1
+         
+        if dirDownFlag:
+            row += 1
+        else:
+            row -= 1
 
-    1. Separate the message into chunks the size of the public key (in our case, fixed at 8)
-    2. For each byte, determine the 8 bits (the `a_i`s) using `utils.byte_to_bits`
-    3. Encrypt the 8 message bits by computing
-         c = sum of a_i * b_i for i = 1 to n
-    4. Return a list of the encrypted ciphertexts for each chunk in the message
+    encrypted_plaintext = ''
+    for i in range(num_rails):
+        for j in range(len(plaintext)):
+            if rail[i][j] != '-1':
+                encrypted_plaintext+=rail[i][j]
+    return encrypted_plaintext
 
-    Hint: think about using `zip` at some point
 
-    @param message The message to be encrypted
-    @type message bytes
-    @param public_key The public key of the desired recipient
-    @type public_key n-tuple of ints
+def decrypt_railfence(ciphertext, num_rails):
+    rail = [["-1" for i in range(len(ciphertext))] for j in range(num_rails)]
+     
+    dirDownFlag = False
+    row = 0
+    col = 0
+     
+    for i in range(len(ciphertext)):
+        if (row == 0) or (row == num_rails - 1):
+            dirDownFlag = not dirDownFlag
+         
+        rail[row][col] = '*'
+        col += 1
+         
+        if dirDownFlag:
+            row += 1
+        else:
+            row -= 1
+             
+    index = 0
+    for i in range(num_rails):
+        for j in range(len(ciphertext)):
+            if ((rail[i][j] == '*') and (index < len(ciphertext))):
+                rail[i][j] = ciphertext[index]
+                index += 1
 
-    @return list of ints representing encrypted bytes
-    """
-    raise NotImplementedError  # Your implementation here
-
-def decrypt_mh(message, private_key):
-    """Decrypt an incoming message using a private key
-
-    1. Extract w, q, and r from the private key
-    2. Compute s, the modular inverse of r mod q, using the
-        Extended Euclidean algorithm (implemented at `utils.modinv(r, q)`)
-    3. For each byte-sized chunk, compute
-         c' = cs (mod q)
-    4. Solve the superincreasing subset sum using c' and w to recover the original byte
-    5. Reconsitite the encrypted bytes to get the original message back
-
-    @param message Encrypted message chunks
-    @type message list of ints
-    @param private_key The private key of the recipient
-    @type private_key 3-tuple of w, q, and r
-
-    @return bytearray or str of decrypted characters
-    """
-    raise NotImplementedError  # Your implementation here
+    decrypted_plaintext = ''
+    row = 0
+    col = 0
+    for i in range(len(ciphertext)):
+         
+        if row == 0:
+            dirDownFlag = True
+        if row == num_rails-1:
+            dirDownFlag = False
+             
+        if (rail[row][col] != '*'):
+            decrypted_plaintext += rail[row][col]
+            col += 1
+             
+        if dirDownFlag:
+            row += 1
+        else:
+            row -= 1
+    return decrypted_plaintext
 
 # encr_caesar = encrypt_caesar("PYTHON")
 # decr_caesar = decrypt_caesar(encr_caesar)
@@ -173,7 +205,10 @@ def decrypt_mh(message, private_key):
 
 # val1 = encrypt_scytale("IAMHURTVERYBADLYHELP",5)
 # # val2 = decrypt_scytale(val1,3)
-
 # print (val1)
 # # print (val2)
+
+val1 = encrypt_railfence("WEAREDISCOVEREDFLEEATONCE",3);
+val2 = decrypt_railfence(val1,3);
+print (val1,val2)
 
