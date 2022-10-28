@@ -42,20 +42,54 @@ def decrypt_caesar(ciphertext):
 # Vigenere Cipher
 
 def encrypt_vigenere(plaintext, keyword):
-    """Encrypt plaintext using a Vigenere cipher with a keyword.
 
-    Add more implementation details here.
-    """
-    raise NotImplementedError  # Your implementation here
+    n=1;
+    m=0;
+    keywordMultiplied='';
+    if (len(keyword)<len(plaintext)):
+        n=len(plaintext)//len(keyword)
+        m=len(plaintext)%len(keyword)
+
+    for i in range(0,n):
+        keywordMultiplied=keywordMultiplied+keyword;
+    for i in range(0,m):
+        keywordMultiplied=keywordMultiplied+keyword[i];
+
+    encryptedText = '';
+    for i in range(len(plaintext)):
+        x =  (chr(ord(plaintext[i])+ord(keywordMultiplied[i])));
+        plusszErtek=0;
+        if (x>'Z'):
+            x = chr(ord(x)-ord('A'))
+        if (x>'Z'):
+            x = chr(ord(x)-26)
+        encryptedText += x
+    return encryptedText
+   
 
 
 def decrypt_vigenere(ciphertext, keyword):
-    """Decrypt ciphertext using a Vigenere cipher with a keyword.
+    n=1;
+    m=0;
+    keywordMultiplied='';
+    if (len(keyword)<len(ciphertext)):
+        n=len(ciphertext)//len(keyword)
+        m=len(ciphertext)%len(keyword)
 
-    Add more implementation details here.
-    """
-    raise NotImplementedError  # Your implementation here
+    for i in range(0,n):
+        keywordMultiplied=keywordMultiplied+keyword;
+    for i in range(0,m):
+        keywordMultiplied=keywordMultiplied+keyword[i];
 
+    encryptedText = '';
+    for i in range(len(ciphertext)):
+        x =  ord(ciphertext[i])-ord(keywordMultiplied[i]);
+        # print (ord(ciphertext[i])-ord(keywordMultiplied[i]));
+        x = chr(x+ord('A'));
+        if (x<'A'):
+            x = chr(ord(x)+26)
+        encryptedText += x
+    return encryptedText
 
 # Merkle-Hellman Knapsack Cryptosystem
 
@@ -138,6 +172,11 @@ def decrypt_mh(message, private_key):
     """
     raise NotImplementedError  # Your implementation here
 
-encr_caesar = encrypt_caesar("PYTHON")
-decr_caesar = decrypt_caesar(encr_caesar)
-print (encr_caesar+"\n"+decr_caesar)
+# encr_caesar = encrypt_caesar("PYTHON")
+# decr_caesar = decrypt_caesar(encr_caesar)
+# print (encr_caesar+"\n"+decr_caesar)
+
+val1 = encrypt_vigenere("APPA", "ONEINPUT")
+print (val1)
+val2=decrypt_vigenere(val1, "ONEINPUT")
+print (val2)
