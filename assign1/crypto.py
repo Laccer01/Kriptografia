@@ -55,7 +55,7 @@ def encrypt_vigenere(plaintext, keyword):
     for i in range(0,m):
         keywordMultiplied=keywordMultiplied+keyword[i];
 
-    encryptedText = '';
+    encrypted_plaintext = '';
     for i in range(len(plaintext)):
         x =  (chr(ord(plaintext[i])+ord(keywordMultiplied[i])));
         plusszErtek=0;
@@ -63,8 +63,9 @@ def encrypt_vigenere(plaintext, keyword):
             x = chr(ord(x)-ord('A'))
         if (x>'Z'):
             x = chr(ord(x)-26)
-        encryptedText += x
-    return encryptedText
+        encrypted_plaintext += x
+    return encrypted_plaintext
+    decrypted_plaintext
    
 
 
@@ -81,54 +82,24 @@ def decrypt_vigenere(ciphertext, keyword):
     for i in range(0,m):
         keywordMultiplied=keywordMultiplied+keyword[i];
 
-    encryptedText = '';
+    decrypted_plaintext = '';
     for i in range(len(ciphertext)):
         x =  ord(ciphertext[i])-ord(keywordMultiplied[i]);
         # print (ord(ciphertext[i])-ord(keywordMultiplied[i]));
         x = chr(x+ord('A'));
         if (x<'A'):
             x = chr(ord(x)+26)
-        encryptedText += x
-    return encryptedText
+        decrypted_plaintext += x
+    return decrypted_plaintext
 
 # Merkle-Hellman Knapsack Cryptosystem
 
-def generate_private_key(n=8):
-    """Generate a private key for use in the Merkle-Hellman Knapsack Cryptosystem.
-
-    Following the instructions in the handout, construct the private key components
-    of the MH Cryptosystem. This consistutes 3 tasks:
-
-    1. Build a superincreasing sequence `w` of length n
-        (Note: you can check if a sequence is superincreasing with `utils.is_superincreasing(seq)`)
-    2. Choose some integer `q` greater than the sum of all elements in `w`
-    3. Discover an integer `r` between 2 and q that is coprime to `q` (you can use utils.coprime)
-
-    You'll need to use the random module for this function, which has been imported already
-
-    Somehow, you'll have to return all of these values out of this function! Can we do that in Python?!
-
-    @param n bitsize of message to send (default 8)
-    @type n int
-
-    @return 3-tuple `(w, q, r)`, with `w` a n-tuple, and q and r ints.
-    """
+def encrypt_scytale(plaintext, circumference):
+    
     raise NotImplementedError  # Your implementation here
 
-def create_public_key(private_key):
-    """Create a public key corresponding to the given private key.
-
-    To accomplish this, you only need to build and return `beta` as described in the handout.
-
-        beta = (b_1, b_2, ..., b_n) where b_i = r × w_i mod q
-
-    Hint: this can be written in one line using a list comprehension
-
-    @param private_key The private key
-    @type private_key 3-tuple `(w, q, r)`, with `w` a n-tuple, and q and r ints.
-
-    @return n-tuple public key
-    """
+def decrypt_scytale(ciphertext, circumference):
+    
     raise NotImplementedError  # Your implementation here
 
 
@@ -176,7 +147,9 @@ def decrypt_mh(message, private_key):
 # decr_caesar = decrypt_caesar(encr_caesar)
 # print (encr_caesar+"\n"+decr_caesar)
 
-val1 = encrypt_vigenere("APPA", "ONEINPUT")
-print (val1)
-val2=decrypt_vigenere(val1, "ONEINPUT")
-print (val2)
+# val1 = encrypt_vigenere("APPA", "ONEINPUT")
+# print (val1)
+# val2=decrypt_vigenere(val1, "ONEINPUT")
+# print (val2)
+
+
