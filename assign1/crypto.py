@@ -94,31 +94,63 @@ def decrypt_vigenere(ciphertext, keyword):
 
 
 def encrypt_scytale(plaintext, circumference):
-    assert len(plaintext) % circumference == 0
-    n = len(plaintext)
-    columns = n // circumference
-    ciphertext = ['-'] * n
-    for i in range(n):
-        row = i // columns
-        col = i % columns
-        ciphertext[col * circumference + row] = plaintext[i]
-    return "".join(ciphertext)
+    rail = [['-1' for i in range(len(plaintext))] for j in range(circumference)]
+     
+    row = 0
+    col = 0
+     
+    for i in range(len(plaintext)):
+        if (row == circumference - 1):
+            row=0;
+         
+        rail[row][col] = plaintext[i]
+        col += 1
+        row += 1;
+         
+       
+    encrypted_plaintext = ''
+    for i in range(circumference):
+        for j in range(len(plaintext)):
+            if rail[i][j] != '-1':
+                encrypted_plaintext+=rail[i][j]
+    return encrypted_plaintext
 
 def decrypt_scytale(ciphertext, circumference):
     
-    db=0;
-    i=0;
-    circumference=circumference-1
-    encrypted_plaintext='';
-    print (len(ciphertext))
-    while (db<len(ciphertext)):
-        encrypted_plaintext+=ciphertext[i];
-        db=db+1;
-        i=i+circumference;
-        print (i)
-        if (i>=len(ciphertext)):
-            i=i-len(ciphertext)+1;
-    return encrypted_plaintext
+    rail = [['-1' for i in range(len(ciphertext))] for j in range(circumference)]
+     
+    row = 0
+    col = 0
+     
+    for i in range(len(ciphertext)):
+        if (row == circumference - 1):
+            row=0;
+         
+        rail[row][col] = '*'
+        col += 1
+        row += 1
+             
+    index = 0
+    for i in range(circumference):
+        for j in range(len(ciphertext)):
+            if ((rail[i][j] == '*') and (index < len(ciphertext))):
+                rail[i][j] = ciphertext[index]
+                index += 1
+
+    decrypted_plaintext = ''
+    row = 0
+    col = 0
+    for i in range(len(ciphertext)):
+         
+        if (row == circumference - 1):
+            row=0;
+             
+        if (rail[row][col] != '*'):
+            decrypted_plaintext += rail[row][col]
+            col += 1
+            row += 1
+    
+    return decrypted_plaintext
 
 
 def encrypt_railfence(plaintext, num_rails):
@@ -203,12 +235,11 @@ def decrypt_railfence(ciphertext, num_rails):
 # val2=decrypt_vigenere(val1, "ONEINPUT")
 # print (val2)
 
-# val1 = encrypt_scytale("IAMHURTVERYBADLYHELP",5)
-# # val2 = decrypt_scytale(val1,3)
-# print (val1)
-# # print (val2)
+val1 = encrypt_scytale("IAMHURTVERYBADLYHELP",5)
+val2 = decrypt_scytale(val1,5)
+print (val1, val2)
 
-val1 = encrypt_railfence("WEAREDISCOVEREDFLEEATONCE",3);
-val2 = decrypt_railfence(val1,3);
-print (val1,val2)
+# val1 = encrypt_railfence("WEAREDISCOVEREDFLEEATONCE",3);
+# val2 = decrypt_railfence(val1,3);
+# print (val1,val2)
 
