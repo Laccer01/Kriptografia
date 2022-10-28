@@ -17,6 +17,12 @@ def encrypt_caesar(plaintext):
     encrypted_plaintext ='';
     for i in range(0,len(plaintext)):
         encrypted_plaintext += chr(ord(plaintext[i]) + 3)
+
+        if (encrypted_plaintext[i] > 'Z'):
+            my_list = list(encrypted_plaintext)
+            my_list[i] = chr(ord(encrypted_plaintext[i]) - 26)
+            encrypted_plaintext = ''.join(my_list)
+    
     return encrypted_plaintext  # Your implementation here
 
 
@@ -24,6 +30,12 @@ def decrypt_caesar(ciphertext):
     decrypted_plaintext ='';
     for i in range(0,len(ciphertext)):
         decrypted_plaintext += chr(ord(ciphertext[i]) - 3)
+    
+        if (decrypted_plaintext[i] < 'A' and decrypted_plaintext[i] < 'Z'):
+            my_list = list(decrypted_plaintext)
+            my_list[i] = chr(ord(decrypted_plaintext[i]) + 26)
+            decrypted_plaintext = ''.join(my_list)
+
     return decrypted_plaintext  # Your implementation here
 
 
