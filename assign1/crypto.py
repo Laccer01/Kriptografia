@@ -95,12 +95,31 @@ def decrypt_vigenere(ciphertext, keyword):
 # Merkle-Hellman Knapsack Cryptosystem
 
 def encrypt_scytale(plaintext, circumference):
-    
-    raise NotImplementedError  # Your implementation here
+    assert len(plaintext) % circumference == 0
+    n = len(plaintext)
+    columns = n // circumference
+    ciphertext = ['-'] * n
+    for i in range(n):
+        row = i // columns
+        col = i % columns
+        ciphertext[col * circumference + row] = plaintext[i]
+    return "".join(ciphertext)
 
 def decrypt_scytale(ciphertext, circumference):
     
-    raise NotImplementedError  # Your implementation here
+    db=0;
+    i=0;
+    circumference=circumference-1
+    encrypted_plaintext='';
+    print (len(ciphertext))
+    while (db<len(ciphertext)):
+        encrypted_plaintext+=ciphertext[i];
+        db=db+1;
+        i=i+circumference;
+        print (i)
+        if (i>=len(ciphertext)):
+            i=i-len(ciphertext)+1;
+    return encrypted_plaintext
 
 
 def encrypt_mh(message, public_key):
@@ -152,4 +171,9 @@ def decrypt_mh(message, private_key):
 # val2=decrypt_vigenere(val1, "ONEINPUT")
 # print (val2)
 
+# val1 = encrypt_scytale("IAMHURTVERYBADLYHELP",5)
+# # val2 = decrypt_scytale(val1,3)
+
+# print (val1)
+# # print (val2)
 
