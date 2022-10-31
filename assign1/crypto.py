@@ -7,7 +7,6 @@ Course: CS 41
 Name: Velican László
 SUNet: vlim2099
 
-Replace this with a description of the program.
 """
 import utils
 
@@ -23,7 +22,7 @@ def encrypt_caesar(plaintext):
             my_list[i] = chr(ord(encrypted_plaintext[i]) - 26)
             encrypted_plaintext = ''.join(my_list)
     
-    return encrypted_plaintext  # Your implementation here
+    return encrypted_plaintext  
 
 
 def decrypt_caesar(ciphertext):
@@ -36,7 +35,7 @@ def decrypt_caesar(ciphertext):
             my_list[i] = chr(ord(decrypted_plaintext[i]) + 26)
             decrypted_plaintext = ''.join(my_list)
 
-    return decrypted_plaintext  # Your implementation here
+    return decrypted_plaintext  
 
 
 # Vigenere Cipher
@@ -64,9 +63,7 @@ def encrypt_vigenere(plaintext, keyword):
         if (x>'Z'):
             x = chr(ord(x)-26)
         encrypted_plaintext += x
-    return encrypted_plaintext
-    decrypted_plaintext
-   
+    return encrypted_plaintext   
 
 
 def decrypt_vigenere(ciphertext, keyword):
@@ -85,7 +82,7 @@ def decrypt_vigenere(ciphertext, keyword):
     decrypted_plaintext = '';
     for i in range(len(ciphertext)):
         x =  ord(ciphertext[i])-ord(keywordMultiplied[i]);
-        # print (ord(ciphertext[i])-ord(keywordMultiplied[i]));
+
         x = chr(x+ord('A'));
         if (x<'A'):
             x = chr(ord(x)+26)
@@ -229,20 +226,4 @@ def decrypt_railfence(ciphertext, num_rails):
             row -= 1
     return decrypted_plaintext
 
-# encr_caesar = encrypt_caesar("PYTHON")
-# decr_caesar = decrypt_caesar(encr_caesar)
-# print (encr_caesar+"\n"+decr_caesar)
-
-# val1 = encrypt_vigenere("APPA", "ONEINPUT")
-# print (val1)
-# val2=decrypt_vigenere(val1, "ONEINPUT")
-# print (val2)
-
-val1 = encrypt_scytale("IAMHURTVERYBADLYHELP",5)
-val2 = decrypt_scytale(val1,5)
-print (val1, val2)
-
-# val1 = encrypt_railfence("WEAREDISCOVEREDFLEEATONCE",3);
-# val2 = decrypt_railfence(val1,3);
-# print (val1,val2)
 
