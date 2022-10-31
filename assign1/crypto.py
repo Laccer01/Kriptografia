@@ -94,6 +94,8 @@ def decrypt_vigenere(ciphertext, keyword):
 
 
 def encrypt_scytale(plaintext, circumference):
+    circumference=circumference+1
+    
     rail = [['-1' for i in range(len(plaintext))] for j in range(circumference)]
      
     row = 0
@@ -116,7 +118,8 @@ def encrypt_scytale(plaintext, circumference):
     return encrypted_plaintext
 
 def decrypt_scytale(ciphertext, circumference):
-    
+    circumference=circumference+1
+
     rail = [['-1' for i in range(len(ciphertext))] for j in range(circumference)]
      
     row = 0
