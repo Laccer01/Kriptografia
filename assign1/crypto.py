@@ -98,7 +98,7 @@ def encrypt_scytale(plaintext, circumference):
         while (i+j*circumference < n):
             encrypted_plaintext += plaintext[i+j*circumference];
             j+=1;
-
+            
     return encrypted_plaintext
 
 def decrypt_scytale(ciphertext, circumference):
@@ -112,50 +112,33 @@ def decrypt_scytale(ciphertext, circumference):
             decrypted_plaintext += ciphertext[i+j*iteration];
             j+=1;
 
-    return decrypted_plaintext
-        
+    return decrypted_plaintext    
 
 
 def encrypt_railfence(plaintext, num_rails):
-    rail = [['-1' for i in range(len(plaintext))] for j in range(num_rails)]
+    encrypted_plaintext = '';
+    n = len(plaintext)
+    num_rails_dinamic = num_rails;
+ 
+    i=0;
+    while (num_rails_dinamic>=0):
+        currentPosition=i;
+        while (currentPosition < n):
+    
+            encrypted_plaintext += plaintext[currentPosition];
+            currentPosition += num_rails_dinamic+1
+            
+        num_rails_dinamic = num_rails_dinamic-2
+        i+=1;
      
-    dirDownFlag = False
-    row = 0
-    col = 0
-     
-    for i in range(len(plaintext)):
-        if (row == 0) or (row == num_rails - 1):
-            dirDownFlag = not dirDownFlag
-         
-        rail[row][col] = plaintext[i]
-        col += 1
-         
-        if dirDownFlag:
-            row += 1
-        else:
-            row -= 1
 
-    encrypted_plaintext = ''
-    for i in range(num_rails):
-        for j in range(len(plaintext)):
-            if rail[i][j] != '-1':
-                encrypted_plaintext+=rail[i][j]
+    currentPosition=i;
+    while (currentPosition < n):
+        encrypted_plaintext += plaintext[currentPosition];
+        currentPosition += num_rails+1
+                
     return encrypted_plaintext
 
-# def encrypt(plaintext, num_rails):
-
-#     num_rails += 1
-#     rail = [""] * num_rails
-#     layer = 0
-#     for character in plaintext:
-#         rail[layer] += character
-#         if layer >= num_rails - 1:
-#             layer = 0
-#         else:
-#             layer += 1
-
-#     cipher = "".join(rail)
-#     return cipher
 
 def decrypt_railfence(ciphertext, num_rails):
     rail = [["-1" for i in range(len(ciphertext))] for j in range(num_rails)]
@@ -203,8 +186,8 @@ def decrypt_railfence(ciphertext, num_rails):
             row -= 1
     return decrypted_plaintext
 
-val2 = encrypt_scytale('IAMHURTVERYBADLYHELP',5)
+val2 = encrypt_railfence('HELLOBELLOKOCSOG',3)
 print (val2)
-
-val3 = decrypt_scytale(val2,5)
+val3 = decrypt_railfence(val2, 3)
 print (val3)
+
