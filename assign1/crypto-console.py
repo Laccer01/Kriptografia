@@ -52,6 +52,7 @@ def get_input(binary=False):
         flags = 'r'
         if binary:
             flags += 'b'
+            print ("tesomsz")
         with open(filename, flags) as infile:
             return infile.read()
 
