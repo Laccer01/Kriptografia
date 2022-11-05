@@ -142,23 +142,23 @@ def encrypt_railfence(plaintext, num_rails):
 
 def decrypt_railfence(ciphertext, num_rails):
     rail = [["-1" for i in range(len(ciphertext))] for j in range(num_rails)]
-
+     
     dirDownFlag = False
     row = 0
     col = 0
-
+     
     for i in range(len(ciphertext)):
         if (row == 0) or (row == num_rails - 1):
             dirDownFlag = not dirDownFlag
-
+         
         rail[row][col] = '*'
         col += 1
-
+         
         if dirDownFlag:
             row += 1
         else:
             row -= 1
-
+             
     index = 0
     for i in range(num_rails):
         for j in range(len(ciphertext)):
@@ -170,20 +170,21 @@ def decrypt_railfence(ciphertext, num_rails):
     row = 0
     col = 0
     for i in range(len(ciphertext)):
-
+         
         if row == 0:
             dirDownFlag = True
         if row == num_rails-1:
             dirDownFlag = False
-
+             
         if (rail[row][col] != '*'):
             decrypted_plaintext += rail[row][col]
             col += 1
-
+             
         if dirDownFlag:
             row += 1
         else:
             row -= 1
     return decrypted_plaintext
+
 
 
