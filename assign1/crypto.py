@@ -141,16 +141,49 @@ def encrypt_railfence(plaintext, num_rails):
 
 
 def decrypt_railfence(ciphertext, num_rails):
-    decrypted_plaintext = '';
-    n = len(ciphertext)
-    print (ciphertext)
-    for i in range(0,(n-1)//num_rails):
-        print (i+i*(n-1)//num_rails)
-        print (ciphertext[i+i*(n-1)//num_rails])
+    rail = [["-1" for i in range(len(ciphertext))] for j in range(num_rails)]
+
+    dirDownFlag = False
+    row = 0
+    col = 0
+
+    for i in range(len(ciphertext)):
+        if (row == 0) or (row == num_rails - 1):
+            dirDownFlag = not dirDownFlag
+
+        rail[row][col] = '*'
+        col += 1
+
+        if dirDownFlag:
+            row += 1
+        else:
+            row -= 1
+
+    index = 0
+    for i in range(num_rails):
+        for j in range(len(ciphertext)):
+            if ((rail[i][j] == '*') and (index < len(ciphertext))):
+                rail[i][j] = ciphertext[index]
+                index += 1
+
+    decrypted_plaintext = ''
+    row = 0
+    col = 0
+    for i in range(len(ciphertext)):
+
+        if row == 0:
+            dirDownFlag = True
+        if row == num_rails-1:
+            dirDownFlag = False
+
+        if (rail[row][col] != '*'):
+            decrypted_plaintext += rail[row][col]
+            col += 1
+
+        if dirDownFlag:
+            row += 1
+        else:
+            row -= 1
     return decrypted_plaintext
 
-val2 = encrypt_railfence('ABCDEFGHIJK',3)
-print (val2)
-val3 = decrypt_railfence(val2, 3)
-print (val3)
 
