@@ -8,23 +8,111 @@ Azonosító: vlim2099
 import random
 import sympy
 
-def byte_xor(ba1, ba2):
-    return bytes([_a ^ _b for _a, _b in zip(ba1, ba2)])
+def toBinary(a):
+    l,m,final=[],[],[]
+    for i in a:
+        l.append(ord(i))
+    for i in l:
+        m.append(int(bin(i)[2:]))
+
+    for i in m:
+        final.append(list(map(int, str(i))))
+    return final
 
 
-def PRNG(seed):
-    random.seed(seed)
-    return random.randint(0, 1000);
+import math
+
+def toString(a):
+  l=[]
+  m=""
+  for i in a:
+    b=0
+    c=0
+    k=int(math.log10(i))+1
+    for j in range(k):
+      b=((i%10)*(2**j))   
+      i=i//10
+      c=c+b
+    l.append(c)
+  for x in l:
+    m=m+chr(x)
+  return m
+
+def binAdd(s1, s2):
+    if not s1 or not s2:
+        return ''
+
+    result  = ''
+    carry   = 0
+
+    i = 7 - 1
+    while(i >= 0):
+        s = s1[i] + s2[i]
+        if s == 2: #1+1
+            if carry == 0:
+                carry = 1
+                result = "%s%s" % (result, '0')
+            else:
+                result = "%s%s" % (result, '1')
+        elif s == 1: # 1+0
+            if carry == 1:
+                result = "%s%s" % (result, '0')
+            else:
+                result = "%s%s" % (result, '1')
+        else: # 0+0
+            if carry == 1:
+                result = "%s%s" % (result, '1')
+                carry = 0   
+            else:
+                result = "%s%s" % (result, '0') 
+
+        i = i - 1;
+
+    if carry>0:
+        result = "%s%s" % (result, '1')
+    return result[::-1]     
 
 
-def encrypt_basic(message):
-    messageBytes = bytes(message, 'utf-8')
-    keyBytes = bytes(key, 'utf-8')
-    encryptedMessage = byte_xor(messageBytes,keyBytes)
-    
-    print("original string: ", message)
-    print("encrypted string: ", encryptedMessage)
-    
+# def convert(list):
+     
+#     s = [str(i) for i in list]
+#     res = int("".join(s)) 
+#     return(res)
+
+def xorByteStringWithKey (string, key):
+    encryptedBitArray = []
+
+    n = len(string)
+    db = 0;
+    while (db<n):
+        currentLetter = string[db];
+        currentLetterBitArray = toBinary(currentLetter);
+        currentIndexAdded = binAdd(currentLetterBitArray[0], key[db]);
+        encryptedBitArray.append(int(currentIndexAdded))
+        db=db+1;
+
+    return encryptedBitArray
+
+# def byte_xor(ba1, ba2):
+#     return bytes([_a ^ _b for _a, _b in zip(ba1, ba2)])
+
+
+# def PRNG(seed):
+#     random.seed(seed)
+#     return random.randint(0, 1000);
+
+
+
+def encrypt_basic(method, seed, data):
+    encryptedMessage = "";
+    n = len(data)
+    if (method == "Solitaire"):
+        return True;
+
+    if (method == "Blum_Blum_Shub"):
+        key = Blum_Blum_Shub_KeyGenerator(n);
+        bitArrayAfterXor = (xorByteStringWithKey(data, key))
+        encryptedMessage = (toString(bitArrayAfterXor))
 
     return encryptedMessage;
 
@@ -32,7 +120,7 @@ def encrypt_basic(message):
 def decrypt_basic(messageBytes, key):
     
     keyBytes = bytes(key, 'utf-8')
-    decryptedMessage = (byte_xor(messageBytes,keyBytes)).decode("utf-8");
+    decryptedMessage = ""# (byte_xor(messageBytes,keyBytes)).decode("utf-8");
     
     print("original string: ", messageBytes)
     print("decrypted: ", decryptedMessage)
@@ -171,60 +259,15 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght):
     return keyList;
 
 
-def toBinary(a):
-  l,m,final=[],[],[]
-  for i in a:
-    l.append(ord(i))
-  for i in l:
-    m.append(int(bin(i)[2:]))
 
-    for i in m:
-        final.append(list(map(int, str(i))))
-  return final
+# x3=(toBinary("Hello"))
+
+# # print (SolitaireKeyGenerator(11,99))
+# x1=(Blum_Blum_Shub_KeyGenerator(2))
+# x2=(Blum_Blum_Shub_KeyGenerator(2))
+# print (x3)
 
 
-def binAdd(s1, s2):
-    if not s1 or not s2:
-        return ''
-
-    result  = ''
-    carry   = 0
-
-    i = 7 - 1
-    while(i >= 0):
-        s = s1[i] + s2[i]
-        if s == 2: #1+1
-            if carry == 0:
-                carry = 1
-                result = "%s%s" % (result, '0')
-            else:
-                result = "%s%s" % (result, '1')
-        elif s == 1: # 1+0
-            if carry == 1:
-                result = "%s%s" % (result, '0')
-            else:
-                result = "%s%s" % (result, '1')
-        else: # 0+0
-            if carry == 1:
-                result = "%s%s" % (result, '1')
-                carry = 0   
-            else:
-                result = "%s%s" % (result, '0') 
-
-        i = i - 1;
-
-    if carry>0:
-        result = "%s%s" % (result, '1')
-    return result[::-1]     
-
-
-x3=(toBinary("Hello"))
-
-# print (SolitaireKeyGenerator(11,99))
-x1=(Blum_Blum_Shub_KeyGenerator(2))
-x2=(Blum_Blum_Shub_KeyGenerator(2))
-print (x3)
-
-
+print (encrypt_basic("Blum_Blum_Shub", 0, "valami"))
 # val=encrypt_basic("mal","123");
 # decrypt_basic(val,"123");
