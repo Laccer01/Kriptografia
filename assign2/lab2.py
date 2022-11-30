@@ -102,9 +102,44 @@ def xorByteStringWithKey (string, key):
 #     return random.randint(0, 1000);
 
 
+def generateSandN ():
+    p=-1;
+    q=-1;
+    start = 999999999;
+    while (p==-1):
+        x = sympy.nextprime(start);
+        if(x % 4 == 3):
+            p=x;
+        start = x+1
 
-def encrypt_basic(method, seed, data):
+    while (q==-1):
+        x = sympy.nextprime(start);
+        if(x % 4 == 3):
+            q=x;
+        start = x+1
+
+    n=p*q
+    s = random.randint(1, n-1)
+
+    return s,n;
+
+
+def encrypt_basic(method, seed, data, n=''):
     encryptedMessage = "";
+    length = len(data)
+    if (method == "Solitaire"):
+        return True;
+
+    if (method == "Blum_Blum_Shub"):
+        key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
+        bitArrayAfterXor = (xorByteStringWithKey(data, key))
+        encryptedMessage = (toString(bitArrayAfterXor))
+
+    return encryptedMessage;
+
+
+def decrypt_basic(method, seed, data):
+    decryptedMessage = "";
     n = len(data)
     if (method == "Solitaire"):
         return True;
@@ -112,21 +147,10 @@ def encrypt_basic(method, seed, data):
     if (method == "Blum_Blum_Shub"):
         key = Blum_Blum_Shub_KeyGenerator(n);
         bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        encryptedMessage = (toString(bitArrayAfterXor))
+        decryptedMessage = (toString(bitArrayAfterXor))
 
-    return encryptedMessage;
+    return decryptedMessage;
 
-
-def decrypt_basic(messageBytes, key):
-    
-    keyBytes = bytes(key, 'utf-8')
-    decryptedMessage = ""# (byte_xor(messageBytes,keyBytes)).decode("utf-8");
-    
-    print("original string: ", messageBytes)
-    print("decrypted: ", decryptedMessage)
-    
-
-    return decryptedMessage
 
 
 # Solitaire ---------------------------------------------------------------------------------------------------------------------------
@@ -217,30 +241,13 @@ def SolitaireKeyGenerator(plaintextLenght, seed):
     return keyList;
  
 
+# Blum Blum Shub ----------------------------------------------------------------------------------------------------------------
 
 
-
-def Blum_Blum_Shub_KeyGenerator(plaintextLenght):
+def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
     keyList = [];
     xList = [];
-    p=-1;
-    q=-1;
-    start = 999999999;
-    while (p==-1):
-        x = sympy.nextprime(start);
-        if(x % 4 == 3):
-            p=x;
-        start = x+1
-
-    while (q==-1):
-        x = sympy.nextprime(start);
-        if(x % 4 == 3):
-            q=x;
-        start = x+1
-
-    n=p*q
-
-    s = random.randint(1, n-1)
+    
     x0 = (s*s)%n
     xList.append(x0);
 
@@ -268,6 +275,20 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght):
 # print (x3)
 
 
-print (encrypt_basic("Blum_Blum_Shub", 0, "valami"))
+
+
+
+
+
+
+
+
+s,n = generateSandN();
+
+# print (Blum_Blum_Shub_KeyGenerator(8, s, n))
+# print (Blum_Blum_Shub_KeyGenerator(8, s, n))
+
+print (encrypt_basic("Blum_Blum_Shub", s, "valami", n))
+
 # val=encrypt_basic("mal","123");
 # decrypt_basic(val,"123");
