@@ -40,24 +40,104 @@ def decrypt_basic(messageBytes, key):
     return decryptedMessage
 
 
+# Solitaire ---------------------------------------------------------------------------------------------------------------------------
 
-def Solitaire_encrypt():
+def movedown(deck,entry,move):          #lejebb mozgat egy kártyát a pakliban
+
+    newindex = deck.index(entry) + move
+    if newindex >= len(deck):
+        newindex -= len(deck) - 1
+    deck.remove(entry)
+    deck.insert(newindex,entry)
+ 
+def countcut(deck,count):               #az alsó kártya száma alapján, a felső számlálókártyákat az alsó fölé helyezzük
+  
+    deck[-1:1] = deck[:count]
+    del(deck[:count])
+ 
+def joker(card):                    #vizsgálom ha a kartya joker kártya e
+    return card in (53, 54)
+ 
+def step(deck):                     #végrehajt egy lépést a paklin és visszatéríti a kulcsot
+ 
+
+    #mozgatja a két jokert
+    movedown(deck,53,1)
+     
+    movedown(deck,54,2)
+
+
+    # triple-cut
+    indexa = deck.index(53)
+    indexb = deck.index(54)
+ 
+    if indexb > indexa:
+        topindex, botindex = indexa, indexb
+    else:
+        topindex, botindex = indexb, indexa
+ 
+    deck.extend(deck[topindex:botindex + 1])
+    deck.extend(deck[:topindex])
+    del(deck[:botindex + 1])
+ 
+
+    #count cut
+    count = deck[-1]
+     
+    if joker(count):
+        count = 53
+     
+    countcut(deck,count)
+
+    count = deck[0]
+     
+    if joker(count):
+        count = 53
+     
+    return deck[count]
+ 
+ 
+
+def randomizeDeck (deck, seed):
+
+    return random.Random(seed).shuffle(deck)
+
+
+def SolitaireKeyGenerator(plaintextLenght, seed):
+
+     
+    deck = [];
+    keyList = [];
+    for i in range(1,55):
+        deck.append(i);
+
+    key=""
+  
+    for _ in range(plaintextLenght):
+        
+        seed = random.randrange(seed*seed)	
+
+        randomizeDeck(deck, seed);
+        key = step(deck)
+ 
+        while joker(key):
+            key = step(deck)
+
+        keyList.append(key);
+
+
+    return keyList;
+ 
+
+
+
+
+def Blum_Blum_Shub_KeyGenerator():
     return True;
 
 
 
-def Solitaire_decrypt():
-    return True;
 
-
-def Blum_Blum_Shub_encrypt():
-    return True;
-
-def Blum_Blum_Shub_decrypt():
-    return True;
-
-
-
-
-val=encrypt_basic("mal","123");
-decrypt_basic(val,"123");
+print (solitare(11,99))
+# val=encrypt_basic("mal","123");
+# decrypt_basic(val,"123");
