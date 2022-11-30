@@ -6,6 +6,7 @@ Azonosító: vlim2099
 
 """
 import random
+import sympy
 
 def byte_xor(ba1, ba2):
     return bytes([_a ^ _b for _a, _b in zip(ba1, ba2)])
@@ -105,7 +106,6 @@ def randomizeDeck (deck, seed):
 
 def SolitaireKeyGenerator(plaintextLenght, seed):
 
-     
     deck = [];
     keyList = [];
     for i in range(1,55):
@@ -132,12 +132,99 @@ def SolitaireKeyGenerator(plaintextLenght, seed):
 
 
 
-def Blum_Blum_Shub_KeyGenerator():
-    return True;
+def Blum_Blum_Shub_KeyGenerator(plaintextLenght):
+    keyList = [];
+    xList = [];
+    p=-1;
+    q=-1;
+    start = 999999999;
+    while (p==-1):
+        x = sympy.nextprime(start);
+        if(x % 4 == 3):
+            p=x;
+        start = x+1
+
+    while (q==-1):
+        x = sympy.nextprime(start);
+        if(x % 4 == 3):
+            q=x;
+        start = x+1
+
+    n=p*q
+
+    s = random.randint(1, n-1)
+    x0 = (s*s)%n
+    xList.append(x0);
+
+    db = 0;
+    while (db<plaintextLenght):
+        dbBit = 0;
+        numberCurrent = [];
+        while (dbBit < 7):
+            xCurrent = xList[-1];
+            xNext = (xCurrent*xCurrent)%n;
+            xList.append(xNext);
+            numberCurrent.append(xNext%2);
+            dbBit=dbBit+1;
+        keyList.append(numberCurrent);
+        db=db+1;
+    return keyList;
 
 
+def toBinary(a):
+  l,m,final=[],[],[]
+  for i in a:
+    l.append(ord(i))
+  for i in l:
+    m.append(int(bin(i)[2:]))
+
+    for i in m:
+        final.append(list(map(int, str(i))))
+  return final
 
 
-print (solitare(11,99))
+def binAdd(s1, s2):
+    if not s1 or not s2:
+        return ''
+
+    result  = ''
+    carry   = 0
+
+    i = 7 - 1
+    while(i >= 0):
+        s = s1[i] + s2[i]
+        if s == 2: #1+1
+            if carry == 0:
+                carry = 1
+                result = "%s%s" % (result, '0')
+            else:
+                result = "%s%s" % (result, '1')
+        elif s == 1: # 1+0
+            if carry == 1:
+                result = "%s%s" % (result, '0')
+            else:
+                result = "%s%s" % (result, '1')
+        else: # 0+0
+            if carry == 1:
+                result = "%s%s" % (result, '1')
+                carry = 0   
+            else:
+                result = "%s%s" % (result, '0') 
+
+        i = i - 1;
+
+    if carry>0:
+        result = "%s%s" % (result, '1')
+    return result[::-1]     
+
+
+x3=(toBinary("Hello"))
+
+# print (SolitaireKeyGenerator(11,99))
+x1=(Blum_Blum_Shub_KeyGenerator(2))
+x2=(Blum_Blum_Shub_KeyGenerator(2))
+print (x3)
+
+
 # val=encrypt_basic("mal","123");
 # decrypt_basic(val,"123");
