@@ -38,6 +38,9 @@ def toString(a):
     m=m+chr(x)
   return m
 
+
+
+
 def binAdd(s1, s2):
     if not s1 or not s2:
         return ''
@@ -73,6 +76,32 @@ def binAdd(s1, s2):
     return result[::-1]     
 
 
+def binarySubstration(str1,str2):
+
+
+    startIdx = 0
+    endIdx = len(str1)-1
+    carry = [0] * len(str1)
+    result = ''
+
+    while endIdx >= startIdx:
+        x = int(str1[endIdx])
+        y = int(str2[endIdx])
+        sub = (carry[endIdx] + x) - y
+        
+        if sub == -1:
+            result += '1'
+            carry[endIdx-1] = -1
+
+        elif sub == 1:
+            result += '1'
+        elif sub == 0:
+            result += '0'
+       
+        endIdx -= 1
+    
+    return result[::-1]
+
 # def convert(list):
      
 #     s = [str(i) for i in list]
@@ -88,11 +117,27 @@ def xorByteStringWithKey (string, key):
         currentLetter = string[db];
         currentLetterBitArray = toBinary(currentLetter);
         currentIndexAdded = binAdd(currentLetterBitArray[0], key[db]);
+        if (len(currentIndexAdded)>7):
+            currentIndexAdded = currentIndexAdded[1:]
         encryptedBitArray.append(int(currentIndexAdded))
         db=db+1;
 
     return encryptedBitArray
 
+
+def xorByteStringWithKeyMinus (string, key):
+    decryptedBitArray = []
+
+    n = len(string)
+    db = 0;
+    while (db<n):
+        currentLetter = string[db];
+        currentLetterBitArray = toBinary(currentLetter);
+        currentIndexAdded = binarySubstration(currentLetterBitArray[0], key[db]);
+        decryptedBitArray.append(int(currentIndexAdded))
+        db=db+1;
+
+    return decryptedBitArray
 # def byte_xor(ba1, ba2):
 #     return bytes([_a ^ _b for _a, _b in zip(ba1, ba2)])
 
@@ -134,20 +179,23 @@ def encrypt_basic(method, seed, data, n=''):
         key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
         bitArrayAfterXor = (xorByteStringWithKey(data, key))
         encryptedMessage = (toString(bitArrayAfterXor))
+        print (key)
 
     return encryptedMessage;
 
 
-def decrypt_basic(method, seed, data):
+def decrypt_basic(method, seed, data, n=''):
     decryptedMessage = "";
-    n = len(data)
+    length = len(data)
     if (method == "Solitaire"):
         return True;
 
     if (method == "Blum_Blum_Shub"):
-        key = Blum_Blum_Shub_KeyGenerator(n);
-        bitArrayAfterXor = (xorByteStringWithKey(data, key))
+        key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
+        bitArrayAfterXor = (xorByteStringWithKeyMinus(data, key))
         decryptedMessage = (toString(bitArrayAfterXor))
+
+        print (key)
 
     return decryptedMessage;
 
@@ -288,7 +336,14 @@ s,n = generateSandN();
 # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
 # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
 
-print (encrypt_basic("Blum_Blum_Shub", s, "valami", n))
+x1 = (encrypt_basic("Blum_Blum_Shub", s, "aa", n))
+print (toBinary("a"))
+print (toBinary(x1))
+print (x1)
+print (decrypt_basic("Blum_Blum_Shub", s, x1, n))
 
+# 
+
+# print(binarySubstration([1,0,0,0],[0,0,0,1]))
 # val=encrypt_basic("mal","123");
 # decrypt_basic(val,"123");
