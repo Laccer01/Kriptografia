@@ -67,7 +67,13 @@ def toString2(listWithBinaryLists):
 
 def Binaryxor(a, b, n):
     ans = ""
-    
+    while (len(a)!=n):
+        a='0'+a;
+
+    while (len(b)!=n):
+        b='0'+b
+
+
     for i in range(n):
          
         if (a[i] == b[i]):
@@ -386,7 +392,7 @@ print (x1)
 # # # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
 # # # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
 
-x1 = (encrypt_basic("Blum_Blum_Shub", s, "aa", n))
+x1 = (encrypt_basic("Blum_Blum_Shub", s, "mano bocanatot kejek, nadon szejetlek, kejlek ne legy mojci es szejess", n))
 # print ("ez a szoveg amit kodolni kell betu\n",toBinary("aa"))
 
 
@@ -394,6 +400,11 @@ x1 = (encrypt_basic("Blum_Blum_Shub", s, "aa", n))
 # print ("ez a kodolt szoveg\n", toBinary(x1))
 print (x1)
 print (decrypt_basic("Blum_Blum_Shub", s, x1, n))
+
+print(bin(12)[2:])
+print(bin(52)[2:])
+print(bin(35)[2:])
+print(bin(41)[2:])
 
 # 
 # print("teeeeeszt" ,toString2([[1, 1, 1, 0, 0, 0, 1], [1, 1, 1, 1, 0, 1, 0]]))
