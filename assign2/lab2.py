@@ -7,8 +7,11 @@ Azonosító: vlim2099
 """
 import random
 import sympy
+import math
+
 
 def toBinary(a):
+    
     l,m,final=[],[],[]
     for i in a:
         l.append(ord(i))
@@ -16,11 +19,10 @@ def toBinary(a):
         m.append(int(bin(i)[2:]))
 
     for i in m:
-        final.append(list(map(int, str(i))))
+        final.append( str(i))
     return final
 
 
-import math
 
 def toString(a):
   l=[]
@@ -28,10 +30,12 @@ def toString(a):
   for i in a:
     b=0
     c=0
-    k=int(math.log10(i))+1
-    for j in range(k):
-      b=((i%10)*(2**j))   
-      i=i//10
+    # print ("jelenlegi ", i)
+    for j in range(len(i)):
+    #   print (i[j])
+      b=((i[j])*(2**i[j]))   
+      
+      
       c=c+b
     l.append(c)
   for x in l:
@@ -39,7 +43,38 @@ def toString(a):
   return m
 
 
+def BinaryToDecimal(binary):
+        
+    binary1 = binary
+    decimal, i, n = 0, 0, 0
+    while(binary != 0):
+        dec = binary % 10
+        decimal = decimal + dec * pow(2, i)
+        binary = binary//10
+        i += 1
+    return (decimal)   
 
+
+def toString2(listWithBinaryLists):
+    str_data = ""
+
+    for list in listWithBinaryLists:
+        # print ("mist vagyok itt", list)
+        decimalData = BinaryToDecimal(int(list))
+        str_data = str_data + chr(decimalData)
+    return  (str_data)
+
+
+def Binaryxor(a, b, n):
+    ans = ""
+    
+    for i in range(n):
+         
+        if (a[i] == b[i]):
+            ans += "0"
+        else:
+            ans += "1"
+    return ans
 
 def binAdd(s1, s2):
     if not s1 or not s2:
@@ -108,18 +143,17 @@ def binarySubstration(str1,str2):
 #     res = int("".join(s)) 
 #     return(res)
 
-def xorByteStringWithKey (string, key):
+def xorByteStringWithKey (string, key):                             #itt a baj
     encryptedBitArray = []
 
     n = len(string)
     db = 0;
     while (db<n):
         currentLetter = string[db];
-        currentLetterBitArray = toBinary(currentLetter);
-        currentIndexAdded = binAdd(currentLetterBitArray[0], key[db]);
-        if (len(currentIndexAdded)>7):
-            currentIndexAdded = currentIndexAdded[1:]
-        encryptedBitArray.append(int(currentIndexAdded))
+        currentLetterBitArray = toBinary(currentLetter)[0];
+        # print ("teszt", currentLetterBitArray, str(key[db]))
+        currrentIndexAddedinList =  (Binaryxor(currentLetterBitArray, str(key[db]),7))
+        encryptedBitArray.append((currrentIndexAddedinList))
         db=db+1;
 
     return encryptedBitArray
@@ -169,6 +203,18 @@ def generateSandN ():
     return s,n;
 
 
+def intToList (data):
+    list = []
+    for number in data:
+        listNumber = []
+        while number!=0:
+            listNumber.append(number%10);
+            number = number//10;
+        listNumber.reverse()
+        list.append(listNumber)
+    return list
+
+
 def encrypt_basic(method, seed, data, n=''):
     encryptedMessage = "";
     length = len(data)
@@ -178,10 +224,13 @@ def encrypt_basic(method, seed, data, n=''):
     if (method == "Blum_Blum_Shub"):
         key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
         bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        encryptedMessage = (toString(bitArrayAfterXor))
-        print (key)
+        print (bitArrayAfterXor, "  ez van most atalakitva hahahahahahhaha")
+
+        encryptedMessage = toString2(bitArrayAfterXor)
+        print ("ez a kulcs", key)
 
     return encryptedMessage;
+
 
 
 def decrypt_basic(method, seed, data, n=''):
@@ -192,10 +241,11 @@ def decrypt_basic(method, seed, data, n=''):
 
     if (method == "Blum_Blum_Shub"):
         key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
-        bitArrayAfterXor = (xorByteStringWithKeyMinus(data, key))
-        decryptedMessage = (toString(bitArrayAfterXor))
+        bitArrayAfterXor = (xorByteStringWithKey(data, key))
+        # print ("most vissza akarom irni", bitArrayAfterXor)
+        decryptedMessage = (toString2(bitArrayAfterXor))
 
-        print (key)
+        # print (key)
 
     return decryptedMessage;
 
@@ -302,12 +352,12 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
     db = 0;
     while (db<plaintextLenght):
         dbBit = 0;
-        numberCurrent = [];
+        numberCurrent = '';
         while (dbBit < 7):
             xCurrent = xList[-1];
             xNext = (xCurrent*xCurrent)%n;
             xList.append(xNext);
-            numberCurrent.append(xNext%2);
+            numberCurrent+=str(xNext%2)
             dbBit=dbBit+1;
         keyList.append(numberCurrent);
         db=db+1;
@@ -318,31 +368,35 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
 # x3=(toBinary("Hello"))
 
 # # print (SolitaireKeyGenerator(11,99))
-# x1=(Blum_Blum_Shub_KeyGenerator(2))
-# x2=(Blum_Blum_Shub_KeyGenerator(2))
-# print (x3)
-
-
-
-
-
-
-
-
-
-
 s,n = generateSandN();
 
-# print (Blum_Blum_Shub_KeyGenerator(8, s, n))
-# print (Blum_Blum_Shub_KeyGenerator(8, s, n))
+x1=(Blum_Blum_Shub_KeyGenerator(2,s,n))
+# x2=(Blum_Blum_Shub_KeyGenerator(2))
+print (x1)
+
+
+
+
+
+
+
+
+
+
+# # # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
+# # # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
 
 x1 = (encrypt_basic("Blum_Blum_Shub", s, "aa", n))
-print (toBinary("a"))
-print (toBinary(x1))
+# print ("ez a szoveg amit kodolni kell betu\n",toBinary("aa"))
+
+
+# toString(Binaryxor(toBinary("aa")[0], '1011010', 7))
+# print ("ez a kodolt szoveg\n", toBinary(x1))
 print (x1)
 print (decrypt_basic("Blum_Blum_Shub", s, x1, n))
 
 # 
+# print("teeeeeszt" ,toString2([[1, 1, 1, 0, 0, 0, 1], [1, 1, 1, 1, 0, 1, 0]]))
 
 # print(binarySubstration([1,0,0,0],[0,0,0,1]))
 # val=encrypt_basic("mal","123");
