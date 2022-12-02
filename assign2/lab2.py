@@ -225,15 +225,15 @@ def encrypt_basic(method, seed, data, n=''):
     encryptedMessage = "";
     length = len(data)
     if (method == "Solitaire"):
-        return True;
+        key = SolitaireKeyGenerator(length,seed);
+        print ("ez a kulcs,", key)
+        bitArrayAfterXor = (xorByteStringWithKey(data, key))
+        encryptedMessage = toString2(bitArrayAfterXor)
 
-    if (method == "Blum_Blum_Shub"):
+    if (method == "BlumBlumShub"):
         key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
         bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        print (bitArrayAfterXor, "  ez van most atalakitva hahahahahahhaha")
-
         encryptedMessage = toString2(bitArrayAfterXor)
-        print ("ez a kulcs", key)
 
     return encryptedMessage;
 
@@ -243,15 +243,15 @@ def decrypt_basic(method, seed, data, n=''):
     decryptedMessage = "";
     length = len(data)
     if (method == "Solitaire"):
-        return True;
+        key = SolitaireKeyGenerator(length,seed);
+        print ("ez a kulcs,", key)
+        bitArrayAfterXor = (xorByteStringWithKey(data, key))
+        decryptedMessage = toString2(bitArrayAfterXor)
 
-    if (method == "Blum_Blum_Shub"):
+    if (method == "BlumBlumShub"):
         key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
         bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        # print ("most vissza akarom irni", bitArrayAfterXor)
         decryptedMessage = (toString2(bitArrayAfterXor))
-
-        # print (key)
 
     return decryptedMessage;
 
@@ -328,10 +328,9 @@ def SolitaireKeyGenerator(plaintextLenght, seed):
         deck.append(i);
 
     key=""
-  
+
     for _ in range(plaintextLenght):
         
-        seed = random.randrange(seed*seed)	
 
         randomizeDeck(deck, seed);
         key = step(deck)
@@ -339,8 +338,8 @@ def SolitaireKeyGenerator(plaintextLenght, seed):
         while joker(key):
             key = step(deck)
 
-        keyList.append(key);
 
+        keyList.append(numberToBinaryStringForm(key));
 
     return keyList;
  
@@ -354,7 +353,6 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
     
     x0 = (s*s)%n
     xList.append(x0);
-
     db = 0;
     while (db<plaintextLenght):
         dbBit = 0;
@@ -376,36 +374,50 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
 # # print (SolitaireKeyGenerator(11,99))
 s,n = generateSandN();
 
-x1=(Blum_Blum_Shub_KeyGenerator(2,s,n))
+# x1=(Blum_Blum_Shub_KeyGenerator(2,s,n))
 # x2=(Blum_Blum_Shub_KeyGenerator(2))
-print (x1)
+# print (x1)
+
+
+
+def numberToBinaryStringForm(intNumber):
+    numberBinary = "{0:b}".format(int(intNumber))
+    while (len(numberBinary)<7):
+        numberBinary = '0'+numberBinary
+
+    return str(numberBinary)
+
+# print (numberToBinaryStringForm(44))
 
 
 
 
+# # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
+
+# print (s,n)
+# x1 = (        ("Blum_Blum_Shub", s, "mano bocanatot kejek, nadon szejetlek, kejlek ne legy mojci es szejess", n))
+# # # print ("ez a szoveg amit kodolni kell betu\n",toBinary("aa"))
+# print (x1)
 
 
+# # toString(Binaryxor(toBinary("aa")[0], '1011010', 7))
+# # print ("ez a kodolt szoveg\n", toBinary(x1))
+# print (decrypt_basic("Blum_Blum_Shub", s, x1, n))
+
+#-------------------------------------------------------------------------------------------------------
 
 
+# x1 = (encrypt_basic("Solitaire", 22, "mano"))
+# # print ("ez a kodolt szoveg\n", toBinary(x1))
+# # print (x1)
+# x2 = (decrypt_basic("Solitaire", s, x1))
 
+# print(bin(12)[2:])
+# print(bin(52)[2:])
+# print(bin(35)[2:])
+# print(bin(41)[2:])
 
-# # # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
-# # # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
-
-x1 = (encrypt_basic("Blum_Blum_Shub", s, "mano bocanatot kejek, nadon szejetlek, kejlek ne legy mojci es szejess", n))
-# print ("ez a szoveg amit kodolni kell betu\n",toBinary("aa"))
-
-
-# toString(Binaryxor(toBinary("aa")[0], '1011010', 7))
-# print ("ez a kodolt szoveg\n", toBinary(x1))
-print (x1)
-print (decrypt_basic("Blum_Blum_Shub", s, x1, n))
-
-print(bin(12)[2:])
-print(bin(52)[2:])
-print(bin(35)[2:])
-print(bin(41)[2:])
-
+# print (SolitaireKeyGenerator(11,22))
 # 
 # print("teeeeeszt" ,toString2([[1, 1, 1, 0, 0, 0, 1], [1, 1, 1, 1, 0, 1, 0]]))
 
