@@ -7,7 +7,6 @@ Azonosító: vlim2099
 """
 import random
 import sympy
-import math
 
 
 def toBinary(a):
@@ -30,13 +29,11 @@ def toString(a):
   for i in a:
     b=0
     c=0
-    # print ("jelenlegi ", i)
+
     for j in range(len(i)):
-    #   print (i[j])
-      b=((i[j])*(2**i[j]))   
-      
-      
+      b=((i[j])*(2**i[j]))         
       c=c+b
+
     l.append(c)
   for x in l:
     m=m+chr(x)
@@ -59,7 +56,6 @@ def toString2(listWithBinaryLists):
     str_data = ""
 
     for list in listWithBinaryLists:
-        # print ("mist vagyok itt", list)
         decimalData = BinaryToDecimal(int(list))
         str_data = str_data + chr(decimalData)
     return  (str_data)
@@ -143,13 +139,8 @@ def binarySubstration(str1,str2):
     
     return result[::-1]
 
-# def convert(list):
-     
-#     s = [str(i) for i in list]
-#     res = int("".join(s)) 
-#     return(res)
 
-def xorByteStringWithKey (string, key):                             #itt a baj
+def xorByteStringWithKey (string, key):                      
     encryptedBitArray = []
 
     n = len(string)
@@ -157,7 +148,7 @@ def xorByteStringWithKey (string, key):                             #itt a baj
     while (db<n):
         currentLetter = string[db];
         currentLetterBitArray = toBinary(currentLetter)[0];
-        # print ("teszt", currentLetterBitArray, str(key[db]))
+
         currrentIndexAddedinList =  (Binaryxor(currentLetterBitArray, str(key[db]),7))
         encryptedBitArray.append((currrentIndexAddedinList))
         db=db+1;
@@ -178,14 +169,6 @@ def xorByteStringWithKeyMinus (string, key):
         db=db+1;
 
     return decryptedBitArray
-# def byte_xor(ba1, ba2):
-#     return bytes([_a ^ _b for _a, _b in zip(ba1, ba2)])
-
-
-# def PRNG(seed):
-#     random.seed(seed)
-#     return random.randint(0, 1000);
-
 
 def generateSandN ():
     p=-1;
@@ -226,7 +209,6 @@ def encrypt_basic(method, seed, data, n=''):
     length = len(data)
     if (method == "Solitaire"):
         key = SolitaireKeyGenerator(length,seed);
-        print ("ez a kulcs,", key)
         bitArrayAfterXor = (xorByteStringWithKey(data, key))
         encryptedMessage = toString2(bitArrayAfterXor)
 
@@ -244,7 +226,6 @@ def decrypt_basic(method, seed, data, n=''):
     length = len(data)
     if (method == "Solitaire"):
         key = SolitaireKeyGenerator(length,seed);
-        print ("ez a kulcs,", key)
         bitArrayAfterXor = (xorByteStringWithKey(data, key))
         decryptedMessage = toString2(bitArrayAfterXor)
 
@@ -320,19 +301,15 @@ def randomizeDeck (deck, seed):
     return random.Random(seed).shuffle(deck)
 
 
-def SolitaireKeyGenerator(plaintextLenght, seed):
-
-    deck = [];
+def SolitaireKeyGenerator(plaintextLenght, deck):
+    
     keyList = [];
-    for i in range(1,55):
-        deck.append(i);
-
+    
     key=""
 
     for _ in range(plaintextLenght):
         
 
-        randomizeDeck(deck, seed);
         key = step(deck)
  
         while joker(key):
@@ -367,18 +344,7 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
         db=db+1;
     return keyList;
 
-
-
-# x3=(toBinary("Hello"))
-
-# # print (SolitaireKeyGenerator(11,99))
 s,n = generateSandN();
-
-# x1=(Blum_Blum_Shub_KeyGenerator(2,s,n))
-# x2=(Blum_Blum_Shub_KeyGenerator(2))
-# print (x1)
-
-
 
 def numberToBinaryStringForm(intNumber):
     numberBinary = "{0:b}".format(int(intNumber))
@@ -387,40 +353,3 @@ def numberToBinaryStringForm(intNumber):
 
     return str(numberBinary)
 
-# print (numberToBinaryStringForm(44))
-
-
-
-
-# # print (Blum_Blum_Shub_KeyGenerator(8, s, n))
-
-# print (s,n)
-# x1 = (        ("Blum_Blum_Shub", s, "mano bocanatot kejek, nadon szejetlek, kejlek ne legy mojci es szejess", n))
-# # # print ("ez a szoveg amit kodolni kell betu\n",toBinary("aa"))
-# print (x1)
-
-
-# # toString(Binaryxor(toBinary("aa")[0], '1011010', 7))
-# # print ("ez a kodolt szoveg\n", toBinary(x1))
-# print (decrypt_basic("Blum_Blum_Shub", s, x1, n))
-
-#-------------------------------------------------------------------------------------------------------
-
-
-# x1 = (encrypt_basic("Solitaire", 22, "mano"))
-# # print ("ez a kodolt szoveg\n", toBinary(x1))
-# # print (x1)
-# x2 = (decrypt_basic("Solitaire", s, x1))
-
-# print(bin(12)[2:])
-# print(bin(52)[2:])
-# print(bin(35)[2:])
-# print(bin(41)[2:])
-
-# print (SolitaireKeyGenerator(11,22))
-# 
-# print("teeeeeszt" ,toString2([[1, 1, 1, 0, 0, 0, 1], [1, 1, 1, 1, 0, 1, 0]]))
-
-# print(binarySubstration([1,0,0,0],[0,0,0,1]))
-# val=encrypt_basic("mal","123");
-# decrypt_basic(val,"123");
