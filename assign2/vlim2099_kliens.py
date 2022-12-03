@@ -25,19 +25,20 @@ def uzenetekKuldese():
         if ('quitFinal' in message):   
             megfelel = False;     
             break;
-        # decodedMessage = decrypt_basic(encrypName,s,kuldendoUzenet,n)
-        print("Az uzenet kodolva: " + message)
-        # print("Az uzenet vissza kodolva: " + decodedMessage)
+        decodedMessage = decrypt_basic(dataFromFile[0],dataFromFile[1],message,dataFromFile[2])
+        print("A kapott uzenet kodolva: " + message)
+        print("A kapott uzenet vissza kodolva: " + decodedMessage)
 
 def beolvasEncryptalas():
     configFile = open("config", "r")
-    encrypName = configFile.readline()
-    print (encrypName)
-    n = configFile.read();
-    s = configFile.read();
-    return encrypName, n, s;
+    dataFromFile = configFile.read().splitlines()
+    dataFromFile[1] = int(dataFromFile[1])
+    if(len(dataFromFile)>2):
+        dataFromFile[2] = int(dataFromFile[2])
 
-encrypName, n, s = beolvasEncryptalas();
+    return dataFromFile;
+
+dataFromFile = beolvasEncryptalas();
 
 init()                                                                  # színek inicializálása
 
@@ -80,12 +81,12 @@ else:                                        # felhasználónév bekérése
 
     while (True & getMegfelel()==True):
         kuldendoUzenet =  input()                                                  #szervernek küldhetünk üzenetet
-        encryptaltKuldendoUzenet = encrypt_basic(encrypName,s,kuldendoUzenet,n)
-        print (encryptaltKuldendoUzenet)
-        print (encrypName,n,s)
+
         jelenlegiDatum = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
 
-        encryptaltKuldendoUzenet = f"{kliensSzine}[{jelenlegiDatum}] {name}{elvalasztoElem}{kuldendoUzenet}{Fore.RESET}"    #hozzáadjuk a színt, küldő nevét és a dátumot is a küldendő üzenethez
+        kuldendoUzenet = f"{kliensSzine}[{jelenlegiDatum}] {name}{elvalasztoElem}{kuldendoUzenet}{Fore.RESET}"    #hozzáadjuk a színt, küldő nevét és a dátumot is a küldendő üzenethez
+
+        encryptaltKuldendoUzenet = encrypt_basic(dataFromFile[0],dataFromFile[1],kuldendoUzenet,dataFromFile[2])
 
         szerverSocket.send(encryptaltKuldendoUzenet.encode())                                #elküldjük az üzenetet
 
