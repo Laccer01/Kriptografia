@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 import os
 
+from lab2 import encrypt_basic, decrypt_basic
+from generateFunctions import beolvasEncryptalas
 
 if (len(sys.argv)!=3):                                                  #ha helyesen van megadva a port és host
     print ("Hasznalat: python vlim2099_szerver.py <host> <port>")
@@ -43,38 +45,31 @@ def kliensUzenete(cs, client_address):
                 msg = cs.recv(1024).decode()
                 szavak = msg.split()
                 szavak1 = szavak[2].split('<')
-
+                
                 socketFelhasznalonev[szavak1[0]] = cs;
             
                 msg = msg.replace(elvalaszto, ": ")
-                
-                if ('online-lista' in msg):
-                    lista = ""
-                    for nev in hasznaltFelhasznalonevek:
-                        lista += nev + ", "
-                    cs.send(lista.encode())    
-                else:
-                    if ('quit' in msg):
-                        socketFelhasznalonev.pop(szavak1[0])
-                        print ('Kilepett a felhasznalo: ' + str(szavak1[0]))
-                    
-                        hasznaltFelhasznalonevek.remove(szavak1[0])
-                    
-                        cs.send("quitFinal".encode())
+                messageSpliitedList = msg.split(' ');
+                messageSpliited = messageSpliitedList[len(messageSpliitedList)-2]
+                print (messageSpliited)
 
-                        break;
-                    else:
-                        if ('(p)' in msg):
-                            szavak = msg.split(' ')
-                            privatSzemely = szavak[4][1:-1]
-                            if (privatSzemely in socketFelhasznalonev):
-                                socketFelhasznalonev[privatSzemely].send(msg.encode())
-                            else:
-                                print ('Nincs ilyen szemely az aktik felhasznalok kozott')
-                        else:
-                            for client_socket in kliensSocketek:
-                                # and send the message
-                                client_socket.send(msg.encode())
+                dataFromFile = beolvasEncryptalas();
+                messageSpliitedEncrypted = encrypt_basic(dataFromFile[0], dataFromFile[1], messageSpliited)
+                
+                
+                if ('quit' in messageSpliitedEncrypted):
+                    socketFelhasznalonev.pop(szavak1[0])    
+                    print ('Kilepett a felhasznalo: ' + str(szavak1[0]))
+                    
+                    hasznaltFelhasznalonevek.remove(szavak1[0])
+                    
+                    cs.send("quitFinal".encode())
+
+                    break;
+                else:
+    
+                    for client_socket in kliensSocketek:
+                        client_socket.send(msg.encode())
                                 
             except Exception as e:
 

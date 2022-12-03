@@ -6,6 +6,8 @@ Azonosító: vlim2099
 
 """
 
+import sympy
+
 #átalakít egy stringet 7 hosszúságu bit streingekké
 def toBinary(a):
     
@@ -78,16 +80,35 @@ def numberToBinaryStringForm(intNumber):
 
     return str(numberBinary)
 
+#genál két nagy prím számot (mod4=3 alakúak) és visszatéríti ezeknek a szorzatát
+def generateN ():
+    p=-1;
+    q=-1;
+    start = 999999999;
+    while (p==-1):
+        x = sympy.nextprime(start);
+        if(x % 4 == 3):
+            p=x;
+        start = x+1
+
+    while (q==-1):
+        x = sympy.nextprime(start);
+        if(x % 4 == 3):
+            q=x;
+        start = x+1
+
+    n=p*q
+    return n;
 
 #általános, bájtsorozatot kódoló/dekódoló folyamtitkosítót
-def encrypt_basic(method, seed, data, n=''):
+def encrypt_basic(method, seed, data):
     encryptedMessage = "";
     length = len(data)
     if (method == "Solitaire"):
         key = SolitaireKeyGenerator(length,seed);
 
     if (method == "BlumBlumShub"):
-        key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
+        key = Blum_Blum_Shub_KeyGenerator(length,seed);
 
     bitArrayAfterXor = (xorByteStringWithKey(data, key))
     encryptedMessage = toString2(bitArrayAfterXor)
@@ -95,14 +116,14 @@ def encrypt_basic(method, seed, data, n=''):
     return encryptedMessage;
 
 
-def decrypt_basic(method, seed, data, n=''):
+def decrypt_basic(method, seed, data):
     decryptedMessage = "";
     length = len(data)
     if (method == "Solitaire"):
         key = SolitaireKeyGenerator(length,seed);
 
     if (method == "BlumBlumShub"):
-        key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
+        key = Blum_Blum_Shub_KeyGenerator(length,seed);
         
     bitArrayAfterXor = (xorByteStringWithKey(data, key))
     decryptedMessage = (toString2(bitArrayAfterXor))
@@ -174,13 +195,15 @@ def SolitaireKeyGenerator(plaintextLenght, deck):
  
 
 # Blum Blum Shub 
-def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
+def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s):
     keyList = [];
     xList = [];
-    
+
+    n = generateN();
     x0 = (s*s)%n
     xList.append(x0);
     db = 0;
+
     while (db<plaintextLenght):
         dbBit = 0;
         numberCurrent = '';

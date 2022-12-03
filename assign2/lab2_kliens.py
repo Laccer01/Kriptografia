@@ -10,9 +10,10 @@ from datetime import datetime
 from colorama import Fore, init, Back
 import sys
 from lab2 import encrypt_basic, decrypt_basic
-
+from generateFunctions import beolvasEncryptalas
 
 megfelel=True
+elvalaszto = "<SEP>"                                                # elválasztó
 
 def getMegfelel():
     return megfelel
@@ -25,18 +26,17 @@ def uzenetekKuldese():
         if ('quitFinal' in message):   
             megfelel = False;     
             break;
-        decodedMessage = decrypt_basic(dataFromFile[0],dataFromFile[1],message,dataFromFile[2])
-        print("A kapott uzenet kodolva: " + message)
+
+    
+        dataFromFile = beolvasEncryptalas();
+        messageSpliitedList = message.split(' ');
+        messageSpliited = messageSpliitedList[len(messageSpliitedList)-2]
+
+        decodedMessage = decrypt_basic(dataFromFile[0],dataFromFile[1],messageSpliited)
+        print (message)
+        print("A kapott uzenet kodolva: " + messageSpliited)        
         print("A kapott uzenet vissza kodolva: " + decodedMessage)
 
-def beolvasEncryptalas():
-    configFile = open("config", "r")
-    dataFromFile = configFile.read().splitlines()
-    dataFromFile[1] = int(dataFromFile[1])
-    if(len(dataFromFile)>2):
-        dataFromFile[2] = int(dataFromFile[2])
-
-    return dataFromFile;
 
 dataFromFile = beolvasEncryptalas();
 
@@ -50,9 +50,6 @@ kliensSzine = random.choice(colors)    # véletlenszerű szín a kliensnek
 if (len(sys.argv)!=3):                                                  #ha helyesen van megadva a port és host
     print ("Hasznalat: python vlim2099_szerver.py <host> <port>")
     exit (1)
-
-
-encrypName, n, s = beolvasEncryptalas();
 
 szerverHost = str(sys.argv[1])                                          #megadott host név
 szerverPort = int(sys.argv[2])                                          #megadott port
@@ -84,10 +81,11 @@ else:                                        # felhasználónév bekérése
 
         jelenlegiDatum = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
 
-        kuldendoUzenet = f"{kliensSzine}[{jelenlegiDatum}] {name}{elvalasztoElem}{kuldendoUzenet}{Fore.RESET}"    #hozzáadjuk a színt, küldő nevét és a dátumot is a küldendő üzenethez
+        dataFromFile = beolvasEncryptalas();
+        encryptaltKuldendoUzenet = encrypt_basic(dataFromFile[0],dataFromFile[1],kuldendoUzenet)
 
-        encryptaltKuldendoUzenet = encrypt_basic(dataFromFile[0],dataFromFile[1],kuldendoUzenet,dataFromFile[2])
+        kuldendoUzenet = f"{kliensSzine}[{jelenlegiDatum}] {name}{elvalasztoElem}{encryptaltKuldendoUzenet} {Fore.RESET}"    #hozzáadjuk a színt, küldő nevét és a dátumot is a küldendő üzenethez
 
-        szerverSocket.send(encryptaltKuldendoUzenet.encode())                                #elküldjük az üzenetet
+        szerverSocket.send(kuldendoUzenet.encode())                                #elküldjük az üzenetet
 
 szerverSocket.close()
