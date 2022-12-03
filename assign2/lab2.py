@@ -5,10 +5,8 @@ Name: Velican László
 Azonosító: vlim2099
 
 """
-import random
-import sympy
 
-
+#átalakít egy stringet 7 hosszúságu bit streingekké
 def toBinary(a):
     
     l,m,final=[],[],[]
@@ -21,28 +19,8 @@ def toBinary(a):
         final.append( str(i))
     return final
 
-
-
-def toString(a):
-  l=[]
-  m=""
-  for i in a:
-    b=0
-    c=0
-
-    for j in range(len(i)):
-      b=((i[j])*(2**i[j]))         
-      c=c+b
-
-    l.append(c)
-  for x in l:
-    m=m+chr(x)
-  return m
-
-
+#átalakít egy bináris számot decimális számmá
 def BinaryToDecimal(binary):
-        
-    binary1 = binary
     decimal, i, n = 0, 0, 0
     while(binary != 0):
         dec = binary % 10
@@ -51,7 +29,7 @@ def BinaryToDecimal(binary):
         i += 1
     return (decimal)   
 
-
+#átalakí egy listát amiben 7 karakter hosszúságu bit stringek vannak, amelyből karakterek lesznek
 def toString2(listWithBinaryLists):
     str_data = ""
 
@@ -60,16 +38,14 @@ def toString2(listWithBinaryLists):
         str_data = str_data + chr(decimalData)
     return  (str_data)
 
-
-def Binaryxor(a, b, n):
+#XOR művelet két bit string között (melyek 7 karakter hosszúak, ha nincs megadva a 3.paraméter)
+def Binaryxor(a, b, n = 7):
     ans = ""
     while (len(a)!=n):
         a='0'+a;
 
     while (len(b)!=n):
         b='0'+b
-
-
     for i in range(n):
          
         if (a[i] == b[i]):
@@ -78,68 +54,7 @@ def Binaryxor(a, b, n):
             ans += "1"
     return ans
 
-def binAdd(s1, s2):
-    if not s1 or not s2:
-        return ''
-
-    result  = ''
-    carry   = 0
-
-    i = 7 - 1
-    while(i >= 0):
-        s = s1[i] + s2[i]
-        if s == 2: #1+1
-            if carry == 0:
-                carry = 1
-                result = "%s%s" % (result, '0')
-            else:
-                result = "%s%s" % (result, '1')
-        elif s == 1: # 1+0
-            if carry == 1:
-                result = "%s%s" % (result, '0')
-            else:
-                result = "%s%s" % (result, '1')
-        else: # 0+0
-            if carry == 1:
-                result = "%s%s" % (result, '1')
-                carry = 0   
-            else:
-                result = "%s%s" % (result, '0') 
-
-        i = i - 1;
-
-    if carry>0:
-        result = "%s%s" % (result, '1')
-    return result[::-1]     
-
-
-def binarySubstration(str1,str2):
-
-
-    startIdx = 0
-    endIdx = len(str1)-1
-    carry = [0] * len(str1)
-    result = ''
-
-    while endIdx >= startIdx:
-        x = int(str1[endIdx])
-        y = int(str2[endIdx])
-        sub = (carry[endIdx] + x) - y
-        
-        if sub == -1:
-            result += '1'
-            carry[endIdx-1] = -1
-
-        elif sub == 1:
-            result += '1'
-        elif sub == 0:
-            result += '0'
-       
-        endIdx -= 1
-    
-    return result[::-1]
-
-
+#XOR művelet egy kulcs és egy string között
 def xorByteStringWithKey (string, key):                      
     encryptedBitArray = []
 
@@ -155,70 +70,29 @@ def xorByteStringWithKey (string, key):
 
     return encryptedBitArray
 
+#átlakít egy számot egy bit számmá string formátumban
+def numberToBinaryStringForm(intNumber):
+    numberBinary = "{0:b}".format(int(intNumber))
+    while (len(numberBinary)<7):
+        numberBinary = '0'+numberBinary
 
-def xorByteStringWithKeyMinus (string, key):
-    decryptedBitArray = []
-
-    n = len(string)
-    db = 0;
-    while (db<n):
-        currentLetter = string[db];
-        currentLetterBitArray = toBinary(currentLetter);
-        currentIndexAdded = binarySubstration(currentLetterBitArray[0], key[db]);
-        decryptedBitArray.append(int(currentIndexAdded))
-        db=db+1;
-
-    return decryptedBitArray
-
-def generateSandN ():
-    p=-1;
-    q=-1;
-    start = 999999999;
-    while (p==-1):
-        x = sympy.nextprime(start);
-        if(x % 4 == 3):
-            p=x;
-        start = x+1
-
-    while (q==-1):
-        x = sympy.nextprime(start);
-        if(x % 4 == 3):
-            q=x;
-        start = x+1
-
-    n=p*q
-    s = random.randint(1, n-1)
-
-    return s,n;
+    return str(numberBinary)
 
 
-def intToList (data):
-    list = []
-    for number in data:
-        listNumber = []
-        while number!=0:
-            listNumber.append(number%10);
-            number = number//10;
-        listNumber.reverse()
-        list.append(listNumber)
-    return list
-
-
+#általános, bájtsorozatot kódoló/dekódoló folyamtitkosítót
 def encrypt_basic(method, seed, data, n=''):
     encryptedMessage = "";
     length = len(data)
     if (method == "Solitaire"):
         key = SolitaireKeyGenerator(length,seed);
-        bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        encryptedMessage = toString2(bitArrayAfterXor)
 
     if (method == "BlumBlumShub"):
         key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
-        bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        encryptedMessage = toString2(bitArrayAfterXor)
+
+    bitArrayAfterXor = (xorByteStringWithKey(data, key))
+    encryptedMessage = toString2(bitArrayAfterXor)
 
     return encryptedMessage;
-
 
 
 def decrypt_basic(method, seed, data, n=''):
@@ -226,20 +100,17 @@ def decrypt_basic(method, seed, data, n=''):
     length = len(data)
     if (method == "Solitaire"):
         key = SolitaireKeyGenerator(length,seed);
-        bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        decryptedMessage = toString2(bitArrayAfterXor)
 
     if (method == "BlumBlumShub"):
         key = Blum_Blum_Shub_KeyGenerator(length,seed,n);
-        bitArrayAfterXor = (xorByteStringWithKey(data, key))
-        decryptedMessage = (toString2(bitArrayAfterXor))
+        
+    bitArrayAfterXor = (xorByteStringWithKey(data, key))
+    decryptedMessage = (toString2(bitArrayAfterXor))
 
     return decryptedMessage;
 
 
-
-# Solitaire ---------------------------------------------------------------------------------------------------------------------------
-
+# Solitaire 
 def movedown(deck,entry,move):          #lejebb mozgat egy kártyát a pakliban
 
     newindex = deck.index(entry) + move
@@ -258,16 +129,11 @@ def joker(card):                    #vizsgálom ha a kartya joker kártya e
  
 def step(deck):                     #végrehajt egy lépést a paklin és visszatéríti a kulcsot
  
-
-    #mozgatja a két jokert
-    movedown(deck,53,1)
-     
+    movedown(deck,53,1)             #mozgatja a két jokert lejebb a pakliban, ha kell a pakli aljára
     movedown(deck,54,2)
 
-
-    # triple-cut
-    indexa = deck.index(53)
-    indexb = deck.index(54)
+    indexa = deck.index(53)         #triple vágás: felcseréli az összes kártyát a felső joker fölött az összes kártyával az alsó joker alatt
+    indexb = deck.index(54)         #-> így a két joker és a köztük levő távolság nem fog változni 
  
     if indexb > indexa:
         topindex, botindex = indexa, indexb
@@ -278,52 +144,36 @@ def step(deck):                     #végrehajt egy lépést a paklin és vissza
     deck.extend(deck[:topindex])
     del(deck[:botindex + 1])
  
-
-    #count cut
-    count = deck[-1]
+    count = deck[-1]                #egy számolt vágás, az alsó lap száma alapján
+                                    #kártyák 1-től 52-ig vannak számozva híd sorrendben
+                                    #bármelyik joker 53-nak számít
      
     if joker(count):
         count = 53
-     
     countcut(deck,count)
 
-    count = deck[0]
-     
+    count = deck[0]                 #a legfelső kártya alapján vissza kell számolni lapokat és az aktuális kártya lesz a kulcskártya.     
     if joker(count):
         count = 53
      
     return deck[count]
  
- 
-
-def randomizeDeck (deck, seed):
-
-    return random.Random(seed).shuffle(deck)
-
 
 def SolitaireKeyGenerator(plaintextLenght, deck):
     
     keyList = [];
-    
     key=""
-
     for _ in range(plaintextLenght):
-        
-
         key = step(deck)
- 
         while joker(key):
             key = step(deck)
-
 
         keyList.append(numberToBinaryStringForm(key));
 
     return keyList;
  
 
-# Blum Blum Shub ----------------------------------------------------------------------------------------------------------------
-
-
+# Blum Blum Shub 
 def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
     keyList = [];
     xList = [];
@@ -343,13 +193,3 @@ def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s, n):
         keyList.append(numberCurrent);
         db=db+1;
     return keyList;
-
-s,n = generateSandN();
-
-def numberToBinaryStringForm(intNumber):
-    numberBinary = "{0:b}".format(int(intNumber))
-    while (len(numberBinary)<7):
-        numberBinary = '0'+numberBinary
-
-    return str(numberBinary)
-
