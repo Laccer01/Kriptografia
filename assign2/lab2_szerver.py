@@ -5,7 +5,7 @@ from pathlib import Path
 import os
 
 from lab2 import encrypt_basic, decrypt_basic
-from generateFunctions import beolvasEncryptalas
+from auxiliaryFunctions import beolvasEncryptalas
 
 if (len(sys.argv)!=3):                                                  #ha helyesen van megadva a port és host
     print ("Hasznalat: python vlim2099_szerver.py <host> <port>")

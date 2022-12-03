@@ -10,7 +10,7 @@ from datetime import datetime
 from colorama import Fore, init, Back
 import sys
 from lab2 import encrypt_basic, decrypt_basic
-from generateFunctions import beolvasEncryptalas
+from auxiliaryFunctions import beolvasEncryptalas
 
 megfelel=True
 elvalaszto = "<SEP>"                                                # elválasztó
@@ -70,7 +70,7 @@ while ('repeat' in message):
 
 else:                                        # felhasználónév bekérése
     print ('Üdv a chat szerveren, néhány tudnivaló:\n1. Ha nyilvános üzenetet szeretnél küldeni, amit mindenki fog látni a részvevők közül akkor csak írj egy üzenetet és enter segítségével elküldheted\n' +
-        '2. Ha privát üzenetet szeretnél küldeni -> (p) (felhasznalo neve) üzenet formájában teheted meg\n3. Ha meg szeretnél nézni a szerveren levő emberek listáját -> online-list\n4. Ha ki akarsz lépni a szerverről -> quit\n\n')
+        '2. Ha ki akarsz lépni a szerverről -> quit\n\n')
 
     kliensSzal = Thread(target=uzenetekKuldese)                             # szál létrehozása
     kliensSzal.daemon = True                                                # legyen a szál daemon azért hogy ha véget ér a főszáll akkor érjen végett az adott szál is

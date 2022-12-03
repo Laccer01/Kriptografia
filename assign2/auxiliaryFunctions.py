@@ -8,6 +8,16 @@ def generateDeck ():
         deck.append(i);
     return deck
 
+def shuffleDeck (deck):
+    n = len(deck)
+    for i in range(n-1,0,-1):
+        j = random.randint(0,i+1)
+        deck[i],deck[j] = deck[j],deck[i]
+    return deck
+
+def copyByValue (variable):
+    return variable
+    
 def generateSeed ():
     p=-1;
     q=-1;
@@ -23,13 +33,10 @@ def generateSeed ():
         if(x % 4 == 3):
             q=x;
         start = x+1
-
+        
     n=p*q
     s = random.randint(1, n-1)
-
     return s;
-
-# print (generateDeck())
 
 def beolvasEncryptalas():
     configFile = open("config", "r")
