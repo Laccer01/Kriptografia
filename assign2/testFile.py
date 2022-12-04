@@ -1,3 +1,14 @@
+"""
+Assignment 2
+Csoport: 524/2
+Név: Velican László
+Azonosító: vlim2099
+
+Függvények kipróbálása
+
+"""
+
+
 from lab2 import encrypt_basic, decrypt_basic, Blum_Blum_Shub_KeyGenerator, SolitaireKeyGenerator
 from auxiliaryFunctions import *
 

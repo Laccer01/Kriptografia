@@ -1,8 +1,16 @@
+"""
+Assignment 2
+Csoport: 524/2
+Név: Velican László
+Azonosító: vlim2099
+
+Szerver implementálása - ahol a kliensek egymás között kommunikálnak
+
+"""
+
 import socket
 from threading import Thread
 import sys
-from pathlib import Path
-import os
 
 from lab2 import encrypt_basic, decrypt_basic
 from auxiliaryFunctions import beolvasEncryptalas
@@ -31,10 +39,10 @@ print(f"[*] A szerver elindult: {szerverHost}:{szerverPort}")
 
 def kliensUzenete(cs, client_address):
   
-    msg = cs.recv(1024).decode()
+    msg = cs.recv(10240).decode()
     while (msg in hasznaltFelhasznalonevek):
         cs.send("repeat".encode())
-        msg = cs.recv(1024).decode()
+        msg = cs.recv(10240).decode()
 
     else:
         cs.send("okes".encode())
@@ -42,7 +50,7 @@ def kliensUzenete(cs, client_address):
 
         while True:
             try:
-                msg = cs.recv(1024).decode()
+                msg = cs.recv(10240).decode()
                 szavak = msg.split()
                 szavak1 = szavak[2].split('<')
                 
@@ -51,7 +59,6 @@ def kliensUzenete(cs, client_address):
                 msg = msg.replace(elvalaszto, ": ")
                 messageSpliitedList = msg.split(' ');
                 messageSpliited = messageSpliitedList[len(messageSpliitedList)-2]
-                print (messageSpliited)
 
                 dataFromFile = beolvasEncryptalas();
                 messageSpliitedEncrypted = encrypt_basic(dataFromFile[0], dataFromFile[1], messageSpliited)
@@ -67,9 +74,10 @@ def kliensUzenete(cs, client_address):
 
                     break;
                 else:
-    
+
                     for client_socket in kliensSocketek:
-                        client_socket.send(msg.encode())
+                        if (socketFelhasznalonev[szavak1[0]]!=client_socket):
+                            client_socket.send(msg.encode())
                                 
             except Exception as e:
 

@@ -1,13 +1,23 @@
-from lab2 import encrypt_basic, decrypt_basic
+"""
+Assignment 2
+Csoport: 524/2
+Név: Velican László
+Azonosító: vlim2099
+
+Segéd függvények amelyek meghívódnak a szerverben/kliensben vagy máashol
+"""
+
 import sympy
 import random
 
+#Generál egy kártya paklit két jokerrel amik még egyáltalán nincsenek összekeverve
 def generateDeck ():
     deck = [];
     for i in range(1,55):
         deck.append(i);
     return deck
 
+#összekever egy paraméterként kapott kártya paklit
 def shuffleDeck (deck):
     n = len(deck)
     for i in range(n-1,0,-1):
@@ -15,9 +25,7 @@ def shuffleDeck (deck):
         deck[i],deck[j] = deck[j],deck[i]
     return deck
 
-def copyByValue (variable):
-    return variable
-    
+#generál egy seed-et a Blum-Blum-Shub függvényhez
 def generateSeed ():
     p=-1;
     q=-1;
@@ -38,6 +46,7 @@ def generateSeed ():
     s = random.randint(1, n-1)
     return s;
 
+#beolvas a condig fileból nevet és kulcsot
 def beolvasEncryptalas():
     configFile = open("config", "r")
     dataFromFile = configFile.read().splitlines()

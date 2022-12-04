@@ -1,8 +1,10 @@
 """
 Assignment 2
-Group: 524/2
-Name: Velican László
+Csoport: 524/2
+Név: Velican László
 Azonosító: vlim2099
+
+Függvények implementálása
 
 """
 
@@ -180,6 +182,7 @@ def step(deck):                     #végrehajt egy lépést a paklin és vissza
     return deck[count]
  
 
+#kulcs generálás Solitaire segítségével
 def SolitaireKeyGenerator(plaintextLenght, deck):
     
     keyList = [];
@@ -194,7 +197,7 @@ def SolitaireKeyGenerator(plaintextLenght, deck):
     return keyList;
  
 
-# Blum Blum Shub 
+#kulcs generálás Blum Blum Shub segítségével
 def Blum_Blum_Shub_KeyGenerator(plaintextLenght, s):
     keyList = [];
     xList = [];

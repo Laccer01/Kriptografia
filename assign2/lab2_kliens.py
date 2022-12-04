@@ -1,13 +1,18 @@
-#Név: Velican László
-#azonosító: vlim2099
-#csoport: 524/2
-#Lab4
+"""
+Assignment 2
+Csoport: 524/2
+Név: Velican László
+Azonosító: vlim2099
+
+Kliens implementálása
+
+"""
 
 import socket
 import random
 from threading import Thread
 from datetime import datetime
-from colorama import Fore, init, Back
+from colorama import Fore, init
 import sys
 from lab2 import encrypt_basic, decrypt_basic
 from auxiliaryFunctions import beolvasEncryptalas
@@ -22,7 +27,7 @@ def getMegfelel():
 def uzenetekKuldese():
     global megfelel
     while True:
-        message = szerverSocket.recv(1024).decode()
+        message = szerverSocket.recv(10204).decode()
         if ('quitFinal' in message):   
             megfelel = False;     
             break;
@@ -62,11 +67,11 @@ szerverSocket.connect((szerverHost, szerverPort))                       # csatla
 print("[+] Sikerült csatlakozni a szerverhez.")
 name = input("Felhasználónév: ")                                        # felhasználónév bekérése
 szerverSocket.send(name.encode())   
-message = szerverSocket.recv(1024).decode()      
+message = szerverSocket.recv(10240).decode()      
 while ('repeat' in message):   
             name = input("A felhasználónév foglalt, válassz egy másik nevet: ")
             szerverSocket.send(name.encode())   
-            message = szerverSocket.recv(1024).decode()     
+            message = szerverSocket.recv(10240).decode()     
 
 else:                                        # felhasználónév bekérése
     print ('Üdv a chat szerveren, néhány tudnivaló:\n1. Ha nyilvános üzenetet szeretnél küldeni, amit mindenki fog látni a részvevők közül akkor csak írj egy üzenetet és enter segítségével elküldheted\n' +
