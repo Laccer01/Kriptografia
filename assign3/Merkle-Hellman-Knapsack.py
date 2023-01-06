@@ -1,6 +1,6 @@
 import random
-import utils
 import math
+import utils
 
 def findCoprimePair(N):
 
@@ -43,22 +43,48 @@ def create_public_key(private_key):
         beta.append((r * w[i])%q)
     return tuple(beta)
 
+def toBinary(a):
+    
+    res = ''.join(format(ord(i), '08b') for i in a)
+    return res;
+
+def BinaryToDecimal(binary):
+        
+    binary1 = binary
+    decimal, i, n = 0, 0, 0
+    while(binary != 0):
+        dec = binary % 10
+        decimal = decimal + dec * pow(2, i)
+        binary = binary//10
+        i += 1
+    return (decimal)  
+
+def toString2(bin_data):
+    str_data=''
+    for i in range (0, len(bin_data), 8):
+        temp_data = int(bin_data[i:i + 8])
+        decimal_data = BinaryToDecimal(temp_data)
+        str_data = str_data + chr(decimal_data)
+        return str_data;
+
 
 def encrypt_mh(message, public_key):
-    """Encrypt an outgoing message using a public key.
-    1. Separate the message into chunks the size of the public key (in our case, fixed at 8)
-    2. For each byte, determine the 8 bits (the `a_i`s) using `utils.byte_to_bits`
-    3. Encrypt the 8 message bits by computing
-         c = sum of a_i * b_i for i = 1 to n
-    4. Return a list of the encrypted ciphertexts for each chunk in the message
-    Hint: think about using `zip` at some point
-    @param message The message to be encrypted
-    @type message bytes
-    @param public_key The public key of the desired recipient
-    @type public_key n-tuple of ints
-    @return list of ints representing encrypted bytes
-    """
-    raise NotImplementedError  # Your implementation here
+  
+    chunks = [message[i:i+8] for i in range(0, len(message), 8)]
+    #print (chunks)
+
+    for chunk in chunks:
+        betuChunk=''
+        for betu in chunk:
+            array = toBinary(betu)
+            c=0;
+            for i in range (0,8):
+                c=c+int(array[i])*int(public_key[i]);
+            betuChunk+=toString2(str(c))
+        print (betuChunk)
+
+
+    #raise NotImplementedError  # Your implementation here
 
 def decrypt_mh(message, private_key):
     """Decrypt an incoming message using a private key
@@ -75,9 +101,19 @@ def decrypt_mh(message, private_key):
     @type private_key 3-tuple of w, q, and r
     @return bytearray or str of decrypted characters
     """
+
+    w=private_key[0];
+    q=private_key[1];
+    r=private_key[2];
+    s = utils.modinv(r,q)
     raise NotImplementedError  # Your implementation here
 
 privKey = (generate_private_key())
 publicKey = (create_public_key(privKey));
 
-print (privKey,"\n",publicKey)
+#print (privKey,"\n",publicKey)
+
+encrypt_mh("abracadabraaaaaas",publicKey)
+
+#xorByteStringWithKey("aha",2);
+#print (toString2('01100001'))
