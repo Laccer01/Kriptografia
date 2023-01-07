@@ -109,8 +109,8 @@ def encrypt_mh(message, public_key):
             # print (betuChunk)
             # print (ord(betuChunk))
             # print (toBinary((betuChunk)))
-        
-        return (betuChunk)
+        chunksFull.append(betuChunk)
+    return (chunksFull)
 
 def modInverse(A, M):
      
@@ -150,8 +150,9 @@ def decrypt_mh(message, private_key):
     s = modInverse(r,q)
     #print (s)
     # print (list(w))
+    chunksFull=[];
     chunks = [message[i:i+8] for i in range(0, len(message), 8)]
-    for chunk in chunks:
+    for chunk in chunks[0]:
         betuChunk=''
         for betuErtek in chunk:
             szam=(betuErtek*s)%q;
@@ -161,26 +162,17 @@ def decrypt_mh(message, private_key):
             megfeleloTomb = (visszaSzamol(komb,szam));
             eredmeny = ((kialakitEredmeny(list(w), megfeleloTomb)));
             betuChunk+= (toString2(str(eredmeny)))
-
-    return betuChunk
+        chunksFull.append(betuChunk)
+    return chunksFull
 
 privKey = (generate_private_key())
 publicKey = (create_public_key(privKey));
+print ("Privat kulcs: ", str(privKey[0]));
 
-# print (privKey,"\n",publicKey)
-#print (modInverse(50 ,2443))
+print ("Publikus kulcs: ", str(publicKey));
 
-#print (toString2('01100001'))
+MHKEnc=encrypt_mh("abcdefsssgh",publicKey)
+print ("Encryptalt szoveg 8-as darabokban: ", str(MHKEnc))
 
-# print("\n\n")
-kar=encrypt_mh("abcdefgh",publicKey)
-# print ('a', ord('a'))
-print (kar)
-kar2 = decrypt_mh(kar,privKey)
-print (kar2)
-
-#print (kar)
-#xorByteStringWithKey("aha",2);
-
-# komb = (getAllCombinations([1,2,3]))
-# print (visszaSzamol(komb,3));
+MHKDec = decrypt_mh(MHKEnc, privKey)
+print ("Decryptalt szoveg 8-as darabokban: ", str(MHKDec))
