@@ -1,0 +1,3 @@
+A Solitaire és a Merkle-Hellman-Knapsack kriptórendszerek implementálásán kívül csak a keyservert sikerült implementálni
+A Kliensek azért vannak megírva hogy ki lehessen próbalni hogy hogyan kommunikálnak a keyserverrel és a keyserver működését lehessen tesztelni.
+A kliensek nem tudnak egymás között kommunikálni.
